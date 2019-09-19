@@ -1,50 +1,78 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 const App = ()=> {
 
   const [hello, setHello] = useState("World");
-  const [count, setCount] = useState([0, 2, 3]);
+  const [count, setCount] = useState([]);
 
-  const upChange = (e) =>{
-    e = {count};
-    
-    console.log(e);
+  const upChange = () =>{
+    const e = count;
+    const length = e.length;
+    let newValue = length+1;
+    (newValue%15===0)     ? newValue = "FizzBuzz"
+      :  (newValue%3===0) ?   newValue = "Fizz"
+      :  (newValue%5===0) ?  newValue = "Buzz"
+      :  (newValue = length+1);
+
+    const result = [...e, newValue];
+    setCount(result);
+    CountList(result);
   }
 
-  const CountList =()=>{
+  const downChange = () =>{
+    const e = count;
+    const result = [...e].slice(0, e.length-1);
+    setCount(result);
+  }
+
+  
+  const CountList =(array)=>{
+    let newList = count;
+    const counting = newList.map((x, index)=>(
+      <li
+        value={x}
+        key={index}
+        className="bulletPoint"
+      >
+        >{x}
+      </li>
+    ));
+
     return(
-      <div>
-      {count.map(e=>(
-        <li
-        value={e}
-        key={count[e]}
-        >
-        {e}
-        </li>
-      ))}
-    </div>
-    )
+    <div className='countList'>
+      FizzBuzz List: 
+        {counting}
+     </div>
+    );
   }
 
   return (
     <div className="App">
       Hello {hello}
-      <CountList/>
     <input
       value={hello}
       onChange={(e=>setHello(e.currentTarget.value))}
     />
-    <button
-      className="button"
-      onClick={upChange()}
-    >
-      +
-    </button>
-    <button>
-      -
-    </button>
+    <section className="buttonSection">  
+      <button
+        className="button"
+        onClick={upChange}
+      >
+        +
+      </button>
+      <button
+        className="button"
+        onClick={downChange}
+      >
+        -
+      </button>
+    </section>
+    <section className="answers">
+      <CountList array={count}/>
+    </section>
+    
+   
     </div>
   );
 }
